@@ -15,7 +15,7 @@ class CURL
 
     const ERR_INVALID_METHOD = -1;
 
-    public function request(array $input, array $options = [])
+    public function request(array $input, array $curloptions = [])
     {
         $url = $input["url"];
 
@@ -69,7 +69,7 @@ class CURL
         ];
         curl_setopt_array($curl, $defaults);
 
-        curl_setopt_array($curl, $options);
+        curl_setopt_array($curl, $curloptions);
 
         $data = curl_exec($curl);
 
