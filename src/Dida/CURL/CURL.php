@@ -33,22 +33,22 @@ class CURL
     }
 
 
-    public function request(array $input, array $curloptions = [])
+    public function request(array $http, array $curloptions = [])
     {
-        $url = $input["url"];
+        $url = $http["url"];
 
-        $method = (isset($input["method"])) ? $input["method"] : $this->method;
+        $method = (isset($http["method"])) ? $http["method"] : $this->method;
         $method = strtoupper($method);
         if (!in_array($method, $this->valid_methods)) {
             return [self::ERR_INVALID_METHOD, "无效的请求方式", null];
         }
 
-        $query = (isset($input["query"])) ? $input["query"] : '';
+        $query = (isset($http["query"])) ? $http["query"] : '';
         if (is_array($query)) {
             $query = http_build_query($query);
         }
 
-        $data = (isset($input["data"])) ? $input["data"] : null;
+        $data = (isset($http["data"])) ? $http["data"] : null;
         if (is_array($data)) {
             $data = http_build_query($data);
         }
@@ -142,7 +142,8 @@ class CURL
         $lines = explode("\r\n", $resp);
 
         $line1 = $lines[0];
-        $r = preg_match("/(HTTP\/)(\d\.\d)\s(\d\d\d)/", $line1, $matches);
+        $pattern = "/(HTTP\/)(\d\.\d)\s(\d\d\d)/";
+        $r = preg_match($pattern, $line1, $matches);
         if ($r) {
             $statusCode = $matches[3];
         } else {
